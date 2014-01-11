@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 	FILE *file;
 	char buf[BUF_LEN];
 	size_t nread;
-	clock_t initclk;
+	struct timespec tm = { 1, 0 };
 
 	if (argc != 2) {
 		fprintf(stderr, "Usage: PROG [DEVICE]\n");
@@ -22,10 +22,11 @@ int main(int argc, char *argv[])
 		return 2;
 	}
 
-	/* wait 1 second for arduino to be ready */
-	initclk = clock();
-	while (((clock() - initclk) / CLOCKS_PER_SEC) < 1)
-		nread = fread(buf, 1, BUF_LEN, file); /* clear the serial buffer while waiting */
+	/* wait 1 second for arduino */
+	nanosleep(&tm, NULL);
+
+	/* remove garbage data in serial */
+	fread(buf, 1, BUF_LEN, file);
 
 	/* start the actual reading */
 	for (;;) {
