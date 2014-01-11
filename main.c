@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* wait 1 second for arduino */
-	nanosleep(&tm, NULL);
+	clock_nanosleep(CLOCK_REALTIME, 0, &tm, NULL);
 
 	/* remove garbage data in serial */
 	fread(buf, 1, BUF_LEN, file);
